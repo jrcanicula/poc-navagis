@@ -1,38 +1,210 @@
-.App {
-  text-align: center;
+.filter {
+  margin-bottom: 10px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.filter label {
+  margin-right: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.map-container {
+  position: relative;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.shape-info {
+  margin-top: 20px;
+}
+
+.charts {
+  display: flex;
+  justify-content: space-around;
+}
+
+.chart {
+  width: 45%;
+}
+
+
+
+.info-window-button:hover {
+  background-color: #e8f0fe;
+}
+
+.info-window-container {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+
+.info-window-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.info-window-button {
+  width: 200px;
+  text-transform: uppercase;
+  padding: 10px 10px;
+  font-size: 10px;
+  color: #1a73e8;
+  letter-spacing: 1.5px;
+  font-weight: bold;
+  border-radius: 10px;
+  border: 1px solid #174ea6;
+  transition: all ease 0.5s;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.info-window-buttons:nth-child(2) {
+  margin-left: 10px;
+}
+
+.info-window-buttons--get-direction {
+  margin-left: 10px;
+}
+
+
+/* General App Styles */
+body {
+  margin: 0;
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f4f4;
+}
+
+/* Header Styles */
+.header {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  background: linear-gradient(135deg, #007BFF, #00D4FF);
   color: white;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+.header h1 {
+  margin: 0;
+  font-size: 36px;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.header p {
+  margin: 10px 0 0;
+  font-size: 18px;
+  color: #f0f0f0;
+}
+
+/* Map Container Styles */
+.map-container {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 120px);
+  /* Adjust based on header height */
+  margin-top: 10px;
+}
+
+/* Filter Styles */
+.filter-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 800px;
+  /* Adjust maximum width as needed */
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.filter-container label {
+  font-size: 16px;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #007BFF;
+}
+
+.filter-container select {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #007BFF;
+  border-radius: 5px;
+  outline: none;
+  color: #333;
+  flex-grow: 1;
+  /* Allow select to grow and fill available space */
+  min-width: 200px;
+  /* Set minimum width for select */
+}
+
+.filter-container select:focus {
+  border-color: #00D4FF;
+}
+
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.button-container button {
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.button-container button:hover {
+  background-color: #0056b3;
+}
+
+
+/* Shape Info Styles */
+.shape-info {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 20px;
+  max-width: 100%;
+}
+
+.shape-info h3 {
+  margin-top: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.shape-info ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0 0;
+}
+
+.shape-info ul li {
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: #666;
+}
+
+.shape-info ul li:last-child {
+  margin-bottom: 0;
+}
+
+.shape-info ul li:before {
+  content: '🍴';
+  margin-right: 10px;
 }
