@@ -94,13 +94,13 @@ const Map = () => {
           return new Promise((resolve, reject) => {
             service.getDetails({ placeId }, (place, status) => {
               if (status === google.maps.places.PlacesServiceStatus.OK) {
-                console.log(place);
+                //console.log(place);
                 resolve({
                   id: place.place_id,
                   name: place.name,
                   location: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
                   type: place.types.join(', ')?.toUpperCase(),
-                  specialties: [getRandomSpecialty()],     
+                  specialties: [getRandomSpecialty()],
                   photoUrl: place.photos?.[0]?.getUrl({ maxWidth: 400, maxHeight: 300 }) || null,
                   visits: JSON.parse(localStorage.getItem(`visits-${place.place_id}`)) || 0,
                 });
@@ -125,11 +125,11 @@ const Map = () => {
               .then((fetchedRestaurants) => {
                 allRestaurants = allRestaurants.concat(fetchedRestaurants.filter(Boolean));
 
-                if (allRestaurants.length < 200 && pagination.hasNextPage) {
+                if (allRestaurants.length < RESTAURANTS_LENGTH && pagination.hasNextPage) {
                   fetchNextPage(pagination);
                 } else {
-                  setRestaurants(allRestaurants.slice(0, 200));
-                  setFilteredRestaurants(allRestaurants.slice(0, 200));
+                  setRestaurants(allRestaurants.slice(0, RESTAURANTS_LENGTH));
+                  setFilteredRestaurants(allRestaurants.slice(0, RESTAURANTS_LENGTH));
                 }
               })
               .catch((error) => {
@@ -330,7 +330,7 @@ const Map = () => {
                 {selectedRestaurant.photoUrl && (
                   <img src={selectedRestaurant.photoUrl} alt={selectedRestaurant.name} style={{ maxWidth: '100%' }} />
                 )}
-                <p>{selectedRestaurant.type}</p>
+                <p>Establishment Type: {selectedRestaurant.type}</p>
                 <p>Visits: {selectedRestaurant.visits}</p>
                 {<p>Specialties: {selectedRestaurant.specialties.join(', ')}</p>}
                 <div className="info-window-buttons">
