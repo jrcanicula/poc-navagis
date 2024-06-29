@@ -1,6 +1,7 @@
 /* global google */
 import React, { useEffect, useState, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, InfoWindow, DirectionsRenderer, DrawingManager } from '@react-google-maps/api';
+import AnalyticsDashboard from './AnalyticsDashboard';
 import Filter from './Filter';
 
 
@@ -23,8 +24,13 @@ const Map = () => {
   const [libraries] = useState(['geometry', 'drawing', 'places']);
   const [isMapLoadedProperlyCount, setIsMapLoadedProperlyCount] = useState(0);
   const [showDrawingManager, setShowDrawingManager] = useState(false);
+  const [analyticsData, setAnalyticsData] = useState(null); // State to hold analytics data
   const mapRef = useRef(null);
+  const [showDashboard, setShowDashboard] = useState(false); // State to toggle dashboard visibility
 
+  const toggleDashboard = () => {
+    setShowDashboard(!showDashboard);
+  };
 
   const onLoad = (map) => {
     mapRef.current = map;
@@ -33,6 +39,28 @@ const Map = () => {
 
   const onUnmount = () => {
     mapRef.current = null;
+  };
+
+  const possibleSpecialties = [
+    'Seafood',
+    'Grilled',
+    'Vegetarian',
+    'Desserts',
+    'Italian',
+    'Japanese',
+    'Mexican',
+    'Filipino',
+    'Chinese',
+    'Barbecue',
+    'Steakhouse',
+    'Vegan',
+    'Thai',
+    'French',
+    'Korean'
+  ];
+
+  const getRandomSpecialty = () => {
+    return possibleSpecialties[Math.floor(Math.random() * possibleSpecialties.length)];
   };
 
   useEffect(() => {
@@ -72,9 +100,9 @@ const Map = () => {
                   name: place.name,
                   location: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
                   type: place.types.join(', ')?.toUpperCase(),
-                  specialties: place.types.includes('restaurant') ? place.types.filter(type => type !== 'restaurant') : [],
-                  photoUrl: place.photos?.[0]?.getUrl({ maxWidth: 200, maxHeight: 150 }) || null,
-                  visits: JSON.parse(localStorage.getItem(`visits-${place.place_id}`)) || 0 
+                  specialties: [getRandomSpecialty()],     
+                  photoUrl: place.photos?.[0]?.getUrl({ maxWidth: 400, maxHeight: 300 }) || null,
+                  visits: JSON.parse(localStorage.getItem(`visits-${place.place_id}`)) || 0,
                 });
               } else {
                 reject(new Error(`Error fetching place details for ${placeId}: ${status}`));
@@ -139,6 +167,9 @@ const Map = () => {
     }
   }, [selectedType, restaurants]);
 
+
+
+
   useEffect(() => {
     if (drawnShape) {
       const shapeBounds = drawnShape.getBounds ? drawnShape.getBounds() : drawnShape.getPath();
@@ -160,9 +191,37 @@ const Map = () => {
     }
   }, [drawnShape, filteredRestaurants]);
 
+  useEffect(() => {
+    // Simulated data aggregation for analytics
+    const aggregateAnalyticsData = () => {
+      const visitsByRestaurant = restaurants.reduce((acc, restaurant) => {
+        acc[restaurant.id] = JSON.parse(localStorage.getItem(`visits-${restaurant.id}`)) || 0;
+        return acc;
+      }, {});
+
+      const revenueByRestaurant = restaurants.reduce((acc, restaurant) => {
+        acc[restaurant.id] = Math.floor(Math.random() * 10000);
+        return acc;
+      }, {});
+
+      const restaurantNames = restaurants.reduce((acc, restaurant) => {
+        acc[restaurant.id] = restaurant.name;
+        return acc;
+      }, {});
+
+      setAnalyticsData({
+        visitsByRestaurant,
+        revenueByRestaurant,
+        restaurantNames
+      });
+    };
+
+    aggregateAnalyticsData();
+  }, [drawnShape, filteredRestaurants]);
+
   const handleMarkerClick = (restaurant) => {
     setSelectedRestaurant(restaurant);
-    setDirections(null); 
+    setDirections(null);
   };
 
   const handleVisit = (restaurant) => {
@@ -273,7 +332,7 @@ const Map = () => {
                 )}
                 <p>{selectedRestaurant.type}</p>
                 <p>Visits: {selectedRestaurant.visits}</p>
-                {/* <p>Specialties: {selectedRestaurant.foodSpecialties.join(', ')}</p> */}
+                {<p>Specialties: {selectedRestaurant.specialties.join(', ')}</p>}
                 <div className="info-window-buttons">
                   <button className="info-window-button" onClick={() => handleVisit(selectedRestaurant)}>Log Visit</button>
                   <button className="info-window-button info-window-buttons--get-direction" onClick={getDirections}>Get Directions (via DRIVING)</button>
@@ -289,24 +348,40 @@ const Map = () => {
           )}
         </GoogleMap>
 
-        {!showDrawingManager && <div className="button-container">
-          <button onClick={() => setShowDrawingManager(!showDrawingManager)}>
-            {showDrawingManager ? 'Activate Drawing Tools' : 'Activate Drawing Tools'}
-          </button>
-        </div>}
-
         {drawnShape && (
           <div className="shape-info">
             <h3>No. of Restaurants in Shape : {shapeRestaurants.length}</h3>
-            <ul>
-              {shapeRestaurants.map((restaurant) => (
-                <li key={restaurant.id}>{restaurant.name}</li>
-              ))}
-            </ul>
           </div>
         )}
 
+        <div style={{ display: "flex", flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
+          {!showDrawingManager && <div className="button-container">
+            <button onClick={() => setShowDrawingManager(!showDrawingManager)}>
+              {showDrawingManager ? 'Activate Drawing Tools' : 'Activate Drawing Tools'}
+            </button>
+          </div>}
+          <div className="button-container">
+            <button onClick={toggleDashboard}>
+              {showDashboard ? 'Hide Analytics Dashboard' : 'Show Analytics Dashboard'}
+            </button>
+          </div>
+        </div>
+
+
       </div>
+
+
+      <div className="analytics-container">
+        {analyticsData && (
+          <AnalyticsDashboard
+            visitsByRestaurant={analyticsData.visitsByRestaurant}
+            revenueByRestaurant={analyticsData.revenueByRestaurant}
+            restaurantNames={analyticsData.restaurantNames}
+            showDashboard={showDashboard}
+          />
+        )}
+      </div>
+
     </LoadScript>
   );
 };
