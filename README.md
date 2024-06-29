@@ -1,45 +1,49 @@
-# Navagis Exam 
+# Discover Cebu's Restaurants
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Discover Cebu's Restaurants is a web application that helps users explore, filter, and navigate to restaurants in Cebu. The application uses the Google Maps API to provide an interactive map experience with various features such as restaurant plotting, filtering by type, directions, visitor tracking, spatial analytics, and revenue analytics.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+### Restaurant Plotting
+- Plot restaurants across Cebu on a map using Google Maps.
+- Each restaurant marker shows its name, type, specialties, and photo.
 
-### `npm start`
+### Food Specialties
+- Each restaurant displays at least one food specialty, randomly assigned from a predefined list.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Filtering
+- Implement a layer panel to filter restaurants by type.
+- The filter updates the map to show only the selected types of restaurants.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Directions
+- Enable customers to get directions to restaurants from their current location.
+- Uses Google Maps Directions API for route calculation.
 
-### `npm test`
+### Visitor Tracking
+- Allow each restaurant to track the number of customers who visited.
+- Visit counts are stored in the browser's localStorage.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Spatial Analytics
+- Draw a circle or rectangle on the map and display the number of restaurants within it.
+- Uses Google Maps Drawing Manager for drawing shapes.
 
-### `npm run build`
+### Analytics
+- Implement analytics to show relationships between patrons, restaurants, and revenue.
+- Display analytics in a graphical format using a visualization library.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Getting Started
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Prerequisites
+- Node.js and npm installed
+- Google Maps API key
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Installation
 
-### `npm run eject`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/discover-cebu-restaurants.git
+   cd discover-cebu-restaurants
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Known Issues
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Know Issues
-
-There is a known bug with the library that I used for drawing the **Spatial Analytics** whhen drawing a circle or rectangle on the map and display the number of restaurants within it.
-
+There is a known bug with the library used for drawing the **Spatial Analytics** when drawing a circle or rectangle on the map and display the number of restaurants within it.
