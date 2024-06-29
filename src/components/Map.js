@@ -199,7 +199,7 @@ const Map = () => {
       }, {});
 
       const revenueByRestaurant = restaurants.reduce((acc, restaurant) => {
-        acc[restaurant.id] = Math.floor(Math.random() * 10000);
+        acc[restaurant.id] = Math.floor(Math.random() * 10000000);
         return acc;
       }, {});
 
