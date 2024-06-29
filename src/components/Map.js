@@ -65,81 +65,80 @@ const Map = () => {
 
   useEffect(() => {
     const loadUserLocationAndPlaces = () => {
-      navigator.geolocation.getCurrentPosition((position) => {
-        const userLatLng = new google.maps.LatLng(CENTER_OF_CEBU_LATITUDE, CENTER_OF_CEBU_LONGTITUDE);
-        setUserLocation({ lat: CENTER_OF_CEBU_LATITUDE, lng: CENTER_OF_CEBU_LONGTITUDE });
+      const userLatLng = new google.maps.LatLng(CENTER_OF_CEBU_LATITUDE, CENTER_OF_CEBU_LONGTITUDE);
+      setUserLocation({ lat: CENTER_OF_CEBU_LATITUDE, lng: CENTER_OF_CEBU_LONGTITUDE });
 
-        const map = mapRef.current;
+      const map = mapRef.current;
 
-        const service = new google.maps.places.PlacesService(map);
+      const service = new google.maps.places.PlacesService(map);
 
-        const request = {
-          location: userLatLng,
-          radius: '100000',
-          type: ['restaurant']
-        };
+      const request = {
+        location: userLatLng,
+        radius: '100000',
+        type: ['restaurant']
+      };
 
-        let allRestaurants = [];
+      let allRestaurants = [];
 
-        const fetchNextPage = (pagination) => {
-          if (pagination.hasNextPage) {
-            pagination.nextPage();
-          } else {
-            setRestaurants(allRestaurants);
-            setFilteredRestaurants(allRestaurants);
-          }
-        };
+      const fetchNextPage = (pagination) => {
+        if (pagination.hasNextPage) {
+          pagination.nextPage();
+        } else {
+          setRestaurants(allRestaurants);
+          setFilteredRestaurants(allRestaurants);
+        }
+      };
 
-        const fetchRestaurantDetails = (placeId) => {
-          return new Promise((resolve, reject) => {
-            service.getDetails({ placeId }, (place, status) => {
-              if (status === google.maps.places.PlacesServiceStatus.OK) {
-                console.log(place);
-                resolve({
-                  id: place.place_id,
-                  name: place.name,
-                  location: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
-                  type: place.types.join(', ')?.toUpperCase(),
-                  specialties: [getRandomSpecialty()],     
-                  photoUrl: place.photos?.[0]?.getUrl({ maxWidth: 400, maxHeight: 300 }) || null,
-                  visits: JSON.parse(localStorage.getItem(`visits-${place.place_id}`)) || 0,
-                });
-              } else {
-                reject(new Error(`Error fetching place details for ${placeId}: ${status}`));
-              }
-            });
-          });
-        };
-
-        const callback = (results, status, pagination) => {
-          if (status === google.maps.places.PlacesServiceStatus.OK) {
-            const promises = results.map((place) => {
-              return fetchRestaurantDetails(place.place_id)
-                .catch((error) => {
-                  console.error(`Error fetching details for place ${place.place_id}: ${error}`);
-                  return null;
-                });
-            });
-
-            Promise.all(promises)
-              .then((fetchedRestaurants) => {
-                allRestaurants = allRestaurants.concat(fetchedRestaurants.filter(Boolean));
-
-                if (allRestaurants.length < 200 && pagination.hasNextPage) {
-                  fetchNextPage(pagination);
-                } else {
-                  setRestaurants(allRestaurants.slice(0, 200));
-                  setFilteredRestaurants(allRestaurants.slice(0, 200));
-                }
-              })
-              .catch((error) => {
-                console.error('Error fetching restaurant details:', error);
+      const fetchRestaurantDetails = (placeId) => {
+        return new Promise((resolve, reject) => {
+          service.getDetails({ placeId }, (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+              //console.log(place);
+              resolve({
+                id: place.place_id,
+                name: place.name,
+                location: { lat: place.geometry.location.lat(), lng: place.geometry.location.lng() },
+                type: place.types.join(', ')?.toUpperCase(),
+                specialties: [getRandomSpecialty()],
+                photoUrl: place.photos?.[0]?.getUrl({ maxWidth: 400, maxHeight: 300 }) || null,
+                visits: JSON.parse(localStorage.getItem(`visits-${place.place_id}`)) || 0,
               });
-          }
-        };
+            } else {
+              reject(new Error(`Error fetching place details for ${placeId}: ${status}`));
+            }
+          });
+        });
+      };
 
-        service.nearbySearch(request, callback);
-      });
+      const callback = (results, status, pagination) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          const promises = results.map((place) => {
+            return fetchRestaurantDetails(place.place_id)
+              .catch((error) => {
+                console.error(`Error fetching details for place ${place.place_id}: ${error}`);
+                return null;
+              });
+          });
+
+          Promise.all(promises)
+            .then((fetchedRestaurants) => {
+              allRestaurants = allRestaurants.concat(fetchedRestaurants.filter(Boolean));
+
+              if (allRestaurants.length < RESTAURANTS_LENGTH && pagination.hasNextPage) {
+                fetchNextPage(pagination);
+              } else {
+                setRestaurants(allRestaurants.slice(0, RESTAURANTS_LENGTH));
+                setFilteredRestaurants(allRestaurants.slice(0, RESTAURANTS_LENGTH));
+              }
+            })
+            .catch((error) => {
+              console.error('Error fetching restaurant details:', error);
+            });
+        }
+      };
+
+      service.nearbySearch(request, callback);
+
     };
 
     if (window.google && window.google.maps) {
@@ -200,7 +199,7 @@ const Map = () => {
       }, {});
 
       const revenueByRestaurant = restaurants.reduce((acc, restaurant) => {
-        acc[restaurant.id] = Math.floor(Math.random() * 10000);
+        acc[restaurant.id] = Math.floor(Math.random() * 10000000);
         return acc;
       }, {});
 
@@ -330,7 +329,7 @@ const Map = () => {
                 {selectedRestaurant.photoUrl && (
                   <img src={selectedRestaurant.photoUrl} alt={selectedRestaurant.name} style={{ maxWidth: '100%' }} />
                 )}
-                <p>{selectedRestaurant.type}</p>
+                <p>Establishment Type: {selectedRestaurant.type}</p>
                 <p>Visits: {selectedRestaurant.visits}</p>
                 {<p>Specialties: {selectedRestaurant.specialties.join(', ')}</p>}
                 <div className="info-window-buttons">

@@ -65,7 +65,7 @@ const AnalyticsDashboard = ({ visitsByRestaurant, revenueByRestaurant, restauran
           />
           <VictoryAxis
             dependentAxis
-            tickFormat={(x) => `$${x}`}
+            tickFormat={(x) => `PHP ${x}`}
             style={{
               axis: { stroke: "transparent" },
               tickLabels: { fontSize: 5, padding: 5 }

@@ -31,6 +31,11 @@ Discover Cebu's Restaurants is a web application that helps users explore, filte
 - Implement analytics to show relationships between patrons, restaurants, and revenue.
 - Display analytics in a graphical format using a visualization library.
 
+## Assumptions
+
+- The user location is assumed to be at the center of Cebu City.
+- Restaurants data is fetched from the Google Places API.
+
 ## Getting Started
 
 ### Prerequisites
@@ -43,6 +48,8 @@ Discover Cebu's Restaurants is a web application that helps users explore, filte
    git clone https://github.com/jrcanicula/poc-navagis
    cd poc-navagis
 
-### Known Issues
+
+
+### Known Issues in Development but not during deployment
 
 There is a known bug with the library used for drawing the **Spatial Analytics** when drawing a circle or rectangle on the map and display the number of restaurants within it.
