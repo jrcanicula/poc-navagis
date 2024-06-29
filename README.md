@@ -41,8 +41,8 @@ Discover Cebu's Restaurants is a web application that helps users explore, filte
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/discover-cebu-restaurants.git
-   cd discover-cebu-restaurants
+   git clone https://github.com/jrcanicula/poc-navagis
+   cd poc-navagis
 
 ### Known Issues
 
