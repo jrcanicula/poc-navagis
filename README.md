@@ -40,7 +40,6 @@ Discover Cebu's Restaurants is a web application that helps users explore, filte
 ### Installation
 
 1. Clone the repository:
-   ```bash
    git clone https://github.com/jrcanicula/poc-navagis
    cd poc-navagis
 
